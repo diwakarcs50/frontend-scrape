@@ -5,22 +5,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const flipkartResultsEl = document.getElementById('flipkartResults');
     const loadingIndicator = document.getElementById('loadingIndicator');
     const errorMessage = document.getElementById('errorMessage');
-
     
-    const API_URL = window.location.origin + '/api/search';
-    // const API_URL = 'https://backend-scrape.onrender.com/ '+ '/api/search';
-
-
- 
+    
+    const API_URL = 'https://backend-scrape.onrender.com/api/search';
+    
     searchButton.addEventListener('click', performSearch);
     
-
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             performSearch();
         }
     });
-
  
     function performSearch() {
         const query = searchInput.value.trim();
@@ -30,14 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-      
         clearResults();
         
-       
         loadingIndicator.classList.remove('d-none');
         errorMessage.classList.add('d-none');
         
-      
         fetch(`${API_URL}?q=${encodeURIComponent(query)}`)
             .then(response => {
                 if (!response.ok) {
@@ -46,10 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
-               
                 loadingIndicator.classList.add('d-none');
-                
-            
                 displayResults(data);
             })
             .catch(error => {
@@ -59,9 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    
     function displayResults(data) {
-        
         if (data.amazon && data.amazon.length > 0) {
             data.amazon.forEach(product => {
                 amazonResultsEl.appendChild(createProductCard(product));
@@ -69,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             amazonResultsEl.innerHTML = '<div class="no-results">No products found on Amazon</div>';
         }
-        
         
         if (data.flipkart && data.flipkart.length > 0) {
             data.flipkart.forEach(product => {
@@ -80,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-  
     function createProductCard(product) {
         const card = document.createElement('a');
         card.className = 'product-card';
@@ -100,13 +85,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
 
-    
     function clearResults() {
         amazonResultsEl.innerHTML = '';
         flipkartResultsEl.innerHTML = '';
     }
 
-  
     function showError(message) {
         errorMessage.textContent = message;
         errorMessage.classList.remove('d-none');
